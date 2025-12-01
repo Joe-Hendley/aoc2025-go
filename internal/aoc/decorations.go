@@ -8,7 +8,9 @@ import (
 
 type decorationPair []string
 
-var decorations = []decorationPair{}
+var decorations = []decorationPair{
+	{"🛞", "🛞🛞🛞"},
+}
 
 // could make this simpler/neater, but also nah
 func decorate(puzzle, part int) string {
