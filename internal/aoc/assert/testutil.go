@@ -1,11 +1,23 @@
 package assert
 
-import "testing"
+import (
+	"reflect"
+	"testing"
+)
 
 func Equal[T comparable](t *testing.T, got, want T) {
 	t.Helper()
 
 	if got != want {
+		t.Errorf("got %v want %v", got, want)
+	}
+}
+
+// could just replace Equal with this tbh
+func DeepEqual[T any](t *testing.T, got, want T) {
+	t.Helper()
+
+	if !reflect.DeepEqual(got, want) {
 		t.Errorf("got %v want %v", got, want)
 	}
 }
