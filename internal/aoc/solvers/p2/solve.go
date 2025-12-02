@@ -20,7 +20,7 @@ func (s *Solver) Init(verbose bool) {
 func (s *Solver) Part1(input string) int {
 	idRanges := parseInput(input)
 	sumInvalidIDs := fun.Fold(fun.Map(idRanges, func(ir idRange) int {
-		return fun.Fold(ir.findInvalidIDs(), func(a, b int) int {
+		return fun.Fold(ir.findInvalidIDsPartOne(), func(a, b int) int {
 			return a + b
 		}, 0)
 	}), func(a, b int) int {
@@ -30,7 +30,15 @@ func (s *Solver) Part1(input string) int {
 }
 
 func (s *Solver) Part2(input string) int {
-	return 0
+	idRanges := parseInput(input)
+	sumInvalidIDs := fun.Fold(fun.Map(idRanges, func(ir idRange) int {
+		return fun.Fold(ir.findInvalidIDsPartTwo(), func(a, b int) int {
+			return a + b
+		}, 0)
+	}), func(a, b int) int {
+		return a + b
+	}, 0)
+	return sumInvalidIDs
 }
 
 type idRange struct {
@@ -38,10 +46,20 @@ type idRange struct {
 	end   int
 }
 
-func (ir idRange) findInvalidIDs() []int {
+func (ir idRange) findInvalidIDsPartOne() []int {
 	invalidIDs := []int{}
 	for id := ir.start; id <= ir.end; id++ {
-		if !isValidID(id) {
+		if !isValidIDPartOne(id) {
+			invalidIDs = append(invalidIDs, id)
+		}
+	}
+	return invalidIDs
+}
+
+func (ir idRange) findInvalidIDsPartTwo() []int {
+	invalidIDs := []int{}
+	for id := ir.start; id <= ir.end; id++ {
+		if !isValidIDPartTwo(id) {
 			invalidIDs = append(invalidIDs, id)
 		}
 	}
@@ -64,7 +82,7 @@ func parseRange(input string) idRange {
 	}
 }
 
-func isValidID(id int) bool {
+func isValidIDPartOne(id int) bool {
 	stringed := strconv.Itoa(id)
 	if len(stringed)%2 != 0 {
 		return true
@@ -78,4 +96,29 @@ func isValidID(id int) bool {
 	}
 
 	return false
+}
+
+func isValidIDPartTwo(id int) bool {
+	stringed := strconv.Itoa(id)
+	for divisor := 2; divisor <= len(stringed); divisor++ {
+		if len(stringed)%divisor != 0 {
+			continue
+		}
+
+		divided := len(stringed) / divisor
+		isValid := false
+
+		for index := 0; index < len(stringed)-divided; index++ {
+			if stringed[index] != stringed[index+divided] {
+				isValid = true
+				break
+			}
+		}
+
+		if !isValid {
+			return false
+		}
+	}
+
+	return true
 }
