@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/fun"
+	"github.com/Joe-Hendley/aoc2025/internal/aoc/integer"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/logger"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/must"
 )
@@ -19,25 +20,17 @@ func (s *Solver) Init(verbose bool) {
 
 func (s *Solver) Part1(input string) int {
 	idRanges := parseInput(input)
-	sumInvalidIDs := fun.Fold(fun.Map(idRanges, func(ir idRange) int {
-		return fun.Fold(ir.findInvalidIDsPartOne(), func(a, b int) int {
-			return a + b
-		}, 0)
-	}), func(a, b int) int {
-		return a + b
-	}, 0)
+	sumInvalidIDs := integer.Sum(fun.FlatMap(idRanges, func(ir idRange) []int {
+		return ir.findInvalidIDsPartOne()
+	})...)
 	return sumInvalidIDs
 }
 
 func (s *Solver) Part2(input string) int {
 	idRanges := parseInput(input)
-	sumInvalidIDs := fun.Fold(fun.Map(idRanges, func(ir idRange) int {
-		return fun.Fold(ir.findInvalidIDsPartTwo(), func(a, b int) int {
-			return a + b
-		}, 0)
-	}), func(a, b int) int {
-		return a + b
-	}, 0)
+	sumInvalidIDs := integer.Sum(fun.FlatMap(idRanges, func(ir idRange) []int {
+		return ir.findInvalidIDsPartTwo()
+	})...)
 	return sumInvalidIDs
 }
 

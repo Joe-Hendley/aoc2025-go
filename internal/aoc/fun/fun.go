@@ -63,3 +63,16 @@ func Enumerate[S ~[]T, T any](slice S) []Enumurated[T] {
 
 	return enumeratedSlice
 }
+
+func FlatMap[S ~[]T, T, E any](slice S, function func(T) []E) []E {
+	mapped := Map(slice, function)
+
+	flattened := []E{}
+	Apply(mapped, func(slice []E) {
+		Apply(slice, func(element E) {
+			flattened = append(flattened, element)
+		})
+	})
+
+	return flattened
+}
