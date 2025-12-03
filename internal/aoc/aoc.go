@@ -8,6 +8,7 @@ import (
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/file"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p1"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p2"
+	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p3"
 )
 
 const header = `
@@ -27,6 +28,7 @@ type solver interface {
 var solvers = []solver{
 	&p1.Solver{},
 	&p2.Solver{},
+	&p3.Solver{},
 }
 
 func Solve() int {
