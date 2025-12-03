@@ -39,17 +39,20 @@ func solveLinePartTwo(line string) int {
 
 func solveLine(line string, numDigits int) int {
 	digits := make([]byte, numDigits)
+	leftBound := 0
+	rightBound := len(line) - numDigits + 1
 
-	for pointerIndex := len(digits) - 1; pointerIndex < len(line); pointerIndex++ {
-		for digitIndex, digitValue := range digits {
-			if line[pointerIndex-(len(digits)-1-digitIndex)] > digitValue {
-				digits[digitIndex] = line[pointerIndex-(len(digits)-1-digitIndex)]
-
-				for index := digitIndex + 1; index < len(digits); index++ {
-					digits[index] = 0
-				}
+	for digitIndex := range digits {
+		maxDigitIndex := leftBound
+		for pointerIndex := leftBound; pointerIndex < rightBound; pointerIndex++ {
+			if line[pointerIndex] > digits[digitIndex] {
+				maxDigitIndex = pointerIndex
+				digits[digitIndex] = line[pointerIndex]
 			}
 		}
+
+		leftBound = maxDigitIndex + 1
+		rightBound = rightBound + 1
 	}
 
 	return must.Atoi(string(digits))
