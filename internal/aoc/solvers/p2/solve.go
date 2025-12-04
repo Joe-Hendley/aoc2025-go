@@ -3,6 +3,7 @@ package p2
 import (
 	"strconv"
 	"strings"
+	"sync"
 
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/fun"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/integer"
@@ -19,6 +20,10 @@ func (s *Solver) Init(verbose bool) {
 }
 
 func (s *Solver) Part1(input string) int {
+	return partOneMultiThreaded(input)
+}
+
+func partOneSingleThreaded(input string) int {
 	idRanges := parseInput(input)
 	sumInvalidIDs := integer.Sum(fun.FlatMap(idRanges, func(ir idRange) []int {
 		return ir.findInvalidIDsPartOne()
@@ -26,12 +31,80 @@ func (s *Solver) Part1(input string) int {
 	return sumInvalidIDs
 }
 
+func partOneMultiThreaded(input string) int {
+	ranges := strings.Split(input, ",")
+
+	wg := sync.WaitGroup{}
+
+	resultChan := make(chan int)
+
+	for _, idr := range ranges {
+		wg.Go(func() {
+			parsedRange := parseRange(idr)
+			res := integer.Sum(parsedRange.findInvalidIDsPartOne()...)
+			resultChan <- res
+		})
+	}
+
+	result := 0
+	done := make(chan struct{})
+	go func() {
+		for partialResult := range resultChan {
+			result += partialResult
+		}
+
+		done <- struct{}{}
+	}()
+
+	wg.Wait()
+	close(resultChan)
+	<-done
+
+	return result
+}
+
 func (s *Solver) Part2(input string) int {
+	return partTwoMultiThreaded(input)
+}
+
+func partTwoSingleThreaded(input string) int {
 	idRanges := parseInput(input)
 	sumInvalidIDs := integer.Sum(fun.FlatMap(idRanges, func(ir idRange) []int {
 		return ir.findInvalidIDsPartTwo()
 	})...)
 	return sumInvalidIDs
+}
+
+func partTwoMultiThreaded(input string) int {
+	ranges := strings.Split(input, ",")
+
+	wg := sync.WaitGroup{}
+
+	resultChan := make(chan int)
+
+	for _, idr := range ranges {
+		wg.Go(func() {
+			parsedRange := parseRange(idr)
+			res := integer.Sum(parsedRange.findInvalidIDsPartTwo()...)
+			resultChan <- res
+		})
+	}
+
+	result := 0
+	done := make(chan struct{})
+	go func() {
+		for partialResult := range resultChan {
+			result += partialResult
+		}
+
+		done <- struct{}{}
+	}()
+
+	wg.Wait()
+	close(resultChan)
+	<-done
+
+	return result
 }
 
 type idRange struct {

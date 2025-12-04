@@ -12,6 +12,19 @@ type Grid[T comparable] struct {
 	height int
 }
 
+func New[T comparable](width, height int, defaultValue T) Grid[T] {
+	inner := make([]T, width*height)
+	for i := range inner {
+		inner[i] = defaultValue
+	}
+
+	return Grid[T]{
+		inner:  inner,
+		width:  width,
+		height: height,
+	}
+}
+
 func FromString(input string) Grid[rune] {
 	trimmed := strings.TrimSpace(input)
 	width := strings.Index(trimmed, "\n")
@@ -73,4 +86,12 @@ func (g Grid[T]) CheckCellInDirection(target T, d direction.Direction, x, y int)
 	}
 
 	return g.At(x+d.X(), y+d.Y()) == target
+}
+
+func (g Grid[T]) Replace(x, y int, value T) {
+	if x < 0 || y < 0 || x >= g.width || y >= g.height {
+		return
+	}
+
+	g.inner[g.idx(x, y)] = value
 }
