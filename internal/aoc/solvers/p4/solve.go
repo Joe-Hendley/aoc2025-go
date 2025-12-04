@@ -22,19 +22,17 @@ func (s *Solver) Part1(input string) int {
 
 	accessibleRolls := 0
 
-	for x := range paperStack.Width() {
-		for y := range paperStack.Height() {
-			if paperStack.At(x, y) == paperRoll {
-				neighbours := 0
-				for _, d := range direction.All() {
-					if paperStack.CheckCellInDirection(paperRoll, d, x, y) {
-						neighbours++
-					}
+	for gridItem := range paperStack.All() {
+		if gridItem.Item() == paperRoll {
+			neighbours := 0
+			for _, d := range direction.All() {
+				if paperStack.CheckCellInDirection(paperRoll, d, gridItem.X(), gridItem.Y()) {
+					neighbours++
 				}
+			}
 
-				if neighbours < 4 {
-					accessibleRolls++
-				}
+			if neighbours < 4 {
+				accessibleRolls++
 			}
 		}
 	}
@@ -50,21 +48,19 @@ func (s *Solver) Part2(input string) int {
 		newPaperStack := grid.New(paperStack.Width(), paperStack.Height(), emptySpace)
 
 		accessibleRolls := 0
-		for x := range paperStack.Width() {
-			for y := range paperStack.Height() {
-				if paperStack.At(x, y) == paperRoll {
-					neighbours := 0
-					for _, d := range direction.All() {
-						if paperStack.CheckCellInDirection(paperRoll, d, x, y) {
-							neighbours++
-						}
+		for gridItem := range paperStack.All() {
+			if gridItem.Item() == paperRoll {
+				neighbours := 0
+				for _, d := range direction.All() {
+					if paperStack.CheckCellInDirection(paperRoll, d, gridItem.X(), gridItem.Y()) {
+						neighbours++
 					}
+				}
 
-					if neighbours < 4 {
-						accessibleRolls++
-					} else {
-						newPaperStack.Replace(x, y, paperRoll)
-					}
+				if neighbours < 4 {
+					accessibleRolls++
+				} else {
+					newPaperStack.Replace(gridItem.X(), gridItem.Y(), paperRoll)
 				}
 			}
 		}

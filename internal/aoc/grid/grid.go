@@ -1,6 +1,7 @@
 package grid
 
 import (
+	"iter"
 	"strings"
 
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/grid/direction"
@@ -35,6 +36,53 @@ func FromString(input string) Grid[rune] {
 		inner:  []rune(singleLine),
 		width:  width,
 		height: height,
+	}
+}
+
+type GridItem[T comparable] struct {
+	x, y  int
+	value T
+}
+
+func (gi GridItem[T]) X() int {
+	return gi.x
+}
+
+func (gi GridItem[T]) Y() int {
+	return gi.y
+}
+
+func (gi GridItem[T]) Item() T {
+	return gi.value
+}
+
+func (g Grid[T]) all() []GridItem[T] {
+	x := 0
+	y := 0
+
+	items := make([]GridItem[T], 0, len(g.inner))
+
+	for _, v := range g.inner {
+		if x >= g.Width() {
+			x = 0
+			y++
+		}
+
+		items = append(items, GridItem[T]{x: x, y: y, value: v})
+
+		x++
+	}
+
+	return items
+}
+
+func (g Grid[T]) All() iter.Seq[GridItem[T]] {
+	return func(yield func(GridItem[T]) bool) {
+		for _, v := range g.all() {
+			if !yield(v) {
+				return
+			}
+		}
 	}
 }
 
