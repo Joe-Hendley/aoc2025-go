@@ -143,3 +143,13 @@ func (g Grid[T]) Replace(x, y int, value T) {
 
 	g.inner[g.idx(x, y)] = value
 }
+
+func (g Grid[T]) MapToNeighbours(x, y int, f func(x, y int, value T)) {
+	for _, d := range direction.All() {
+		dx := x + d.X()
+		dy := y + d.Y()
+		if g.InBounds(dx, dy) {
+			f(dx, dy, g.At(dx, dy))
+		}
+	}
+}
