@@ -7,6 +7,7 @@ import (
 
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/assert"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/file"
+	"github.com/Joe-Hendley/aoc2025/internal/aoc/logger"
 )
 
 func TestPartOne(t *testing.T) {
@@ -24,14 +25,14 @@ func TestParseFreshRanges(t *testing.T) {
 	input := file.MustReadToString("test.txt")
 	freshRangesInput := strings.Split(input, "\n\n")[0]
 
-	got := parseRanges(freshRangesInput)
+	got := parseRanges(logger.New(false), freshRangesInput)
 	want := []freshRange{{3, 5}, {10, 20}}
 	assert.DeepEqual(t, got, want)
 }
 
 func TestIsFresh(t *testing.T) {
 	input := file.MustReadToString("test.txt")
-	freshRanges := parseRanges(strings.Split(input, "\n\n")[0])
+	freshRanges := parseRanges(logger.New(false), strings.Split(input, "\n\n")[0])
 
 	testCases := []struct {
 		ingredientID   int

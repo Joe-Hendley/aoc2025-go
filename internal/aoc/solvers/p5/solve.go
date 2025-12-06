@@ -1,7 +1,6 @@
 package p5
 
 import (
-	"fmt"
 	"slices"
 	"strings"
 
@@ -20,7 +19,7 @@ func (s *Solver) Init(verbose bool) {
 
 func (s *Solver) Part1(input string) int {
 	parts := strings.Split(input, "\n\n")
-	freshRanges := parseRanges(parts[0])
+	freshRanges := parseRanges(s.Logger, parts[0])
 	ingredientIDs := must.StringSplitToInts(parts[1], "\n")
 
 	freshIngredients := 0
@@ -48,43 +47,43 @@ func parseRange(input string) freshRange {
 
 type freshRanges []freshRange
 
-func parseRanges(input string) freshRanges {
+func parseRanges(logger logger.Logger, input string) freshRanges {
 	var fr freshRanges = []freshRange{}
 
 	for i, line := range strings.Split(input, "\n") {
-		fmt.Println("inserting range", line)
+		logger.Log("inserting range", line)
 		parsedRange := parseRange(line)
-		fr = fr.insert(parsedRange)
-		fmt.Println(i+1, len(fr))
+		fr = fr.insert(logger, parsedRange)
+		logger.Log(i+1, len(fr))
 	}
 
 	return fr
 }
 
-func (fr freshRanges) insert(newRange freshRange) freshRanges {
+func (fr freshRanges) insert(logger logger.Logger, newRange freshRange) freshRanges {
 	for index, existingRange := range fr {
 		switch {
 		case newRange.start < existingRange.start && newRange.end < existingRange.start-1:
 			if index == 0 {
-				fmt.Println("inserting at start before", existingRange)
+				logger.Log("inserting at start before", existingRange)
 			} else {
-				fmt.Println("greater than", fr[index-1], "inserting before", existingRange)
+				logger.Log("greater than", fr[index-1], "inserting before", existingRange)
 			}
 			return slices.Insert(fr, index, newRange)
 		case newRange.start < existingRange.start && newRange.end <= existingRange.end:
-			fmt.Println("overlaps start, extending range", existingRange)
+			logger.Log("overlaps start, extending range", existingRange)
 			fr[index] = freshRange{start: newRange.start, end: existingRange.end}
 			return fr
 		case newRange.start <= existingRange.end && newRange.end <= existingRange.end:
-			fmt.Println("no action, exists in range", existingRange)
+			logger.Log("no action, exists in range", existingRange)
 			return fr
 		case newRange.start <= existingRange.end+1 && newRange.end > existingRange.end:
 			if index < len(fr)-1 && newRange.end < fr[index+1].start {
-				fmt.Println("overlaps end, extending range", existingRange)
+				logger.Log("overlaps end, extending range", existingRange)
 				fr[index] = freshRange{start: existingRange.start, end: newRange.end}
 				return fr
 			} else {
-				fmt.Println("overlaps end & start of next, extending range", existingRange, fr[index+1])
+				logger.Log("overlaps end & start of next, extending range", existingRange, fr[index+1])
 				fr[index] = freshRange{start: existingRange.start, end: fr[index+1].end}
 				return slices.Delete(fr, index+1, index+2)
 			}
@@ -96,9 +95,9 @@ func (fr freshRanges) insert(newRange freshRange) freshRanges {
 	}
 
 	if len(fr) == 0 {
-		fmt.Println("no entries, adding to empty slice")
+		logger.Log("no entries, adding to empty slice")
 	} else {
-		fmt.Println("appending to end after", fr[len(fr)-1])
+		logger.Log("appending to end after", fr[len(fr)-1])
 	}
 	appended := append(fr, newRange)
 
@@ -116,14 +115,14 @@ func (fr freshRanges) isFresh(id int) bool {
 
 func (s *Solver) Part2(input string) int {
 	parts := strings.Split(input, "\n\n")
-	freshRanges := parseRanges(parts[0])
+	freshRanges := parseRanges(s.Logger, parts[0])
 
 	freshIngredientIDs := 0
 
-	fmt.Println(1<<63 - 1)
+	s.Logger.Log(1<<63 - 1)
 
 	for _, freshRange := range freshRanges {
-		fmt.Printf("%15d - %-15d | %16d | %16d\n", freshRange.start, freshRange.end, (freshRange.end-freshRange.start)+1, freshIngredientIDs+(freshRange.end-freshRange.start)+1)
+		s.Logger.Logf("%15d - %-15d | %16d | %16d", freshRange.start, freshRange.end, (freshRange.end-freshRange.start)+1, freshIngredientIDs+(freshRange.end-freshRange.start)+1)
 		freshIngredientIDs += (freshRange.end - freshRange.start) + 1
 	}
 
