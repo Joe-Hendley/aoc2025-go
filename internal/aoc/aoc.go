@@ -10,6 +10,7 @@ import (
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p2"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p3"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p4"
+	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p5"
 )
 
 const header = `
@@ -31,6 +32,7 @@ var solvers = []solver{
 	&p2.Solver{},
 	&p3.Solver{},
 	&p4.Solver{},
+	&p5.Solver{},
 }
 
 func Solve() int {
