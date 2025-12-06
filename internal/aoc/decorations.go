@@ -14,7 +14,7 @@ var decorations = []decorationPair{
 	{"🔋", "⚡"},
 	{"🧻", "🧻🧻🧻"},
 	{"🍏", "🍎"},
-	{"🐙"},
+	{"🐙", "🦑"},
 }
 
 // could make this simpler/neater, but also nah
