@@ -11,6 +11,7 @@ import (
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p3"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p4"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p5"
+	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p6"
 )
 
 const header = `
@@ -33,6 +34,7 @@ var solvers = []solver{
 	&p3.Solver{},
 	&p4.Solver{},
 	&p5.Solver{},
+	&p6.Solver{},
 }
 
 func Solve() int {
@@ -53,6 +55,7 @@ var totalTime time.Duration
 var totalStars = 0
 
 func solveAll(cfg config) int {
+
 	pooledOut := 0
 
 	for i := range solvers {
