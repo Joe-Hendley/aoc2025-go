@@ -37,7 +37,7 @@ func (s *Solver) Part1(input string) int {
 			panic("out of possible connections")
 		}
 
-		_ = playground.connect(closestPair.junctionBoxIDs.a, closestPair.junctionBoxIDs.b)
+		playground.connect(closestPair.junctionBoxIDs.a, closestPair.junctionBoxIDs.b)
 
 		// WHY WOULD YOU CONNECT THEM IF THEY'RE ALREADY PART OF THE SAME CIRCUIT I LOST HOURS OF MY LIFE ON THIS
 		// MAKE IT CLEARER IF YOU SAY NOTHING HAPPENS FFS
@@ -67,7 +67,7 @@ func (s *Solver) Part2(input string) int {
 			panic("out of possible connections")
 		}
 		lastBoxes = closestPair.junctionBoxIDs
-		_ = playground.connect(closestPair.junctionBoxIDs.a, closestPair.junctionBoxIDs.b)
+		playground.connect(closestPair.junctionBoxIDs.a, closestPair.junctionBoxIDs.b)
 	}
 
 	// then start counting circuit sizes
@@ -196,20 +196,12 @@ func (p *playground) popClosestPair() (distance, bool) {
 	return closest, true
 }
 
-func (p *playground) connect(junctionBox1, junctionBox2 int) bool {
+func (p *playground) connect(junctionBox1, junctionBox2 int) {
 	circuitID1 := p.junctionBoxes[junctionBox1].circuitID
 	circuitID2 := p.junctionBoxes[junctionBox2].circuitID
 
 	if circuitID1 == circuitID2 {
-		return false
-	}
-
-	if _, ok := p.circuits[circuitID1]; !ok {
-		p.logger.Log("empty circuit", circuitID1, "on junction box", junctionBox1)
-	}
-
-	if _, ok := p.circuits[circuitID2]; !ok {
-		p.logger.Log("empty circuit", circuitID1, "on junction box", junctionBox2)
+		return
 	}
 
 	p.joinCircuits(circuitID1, circuitID2)
@@ -218,7 +210,7 @@ func (p *playground) connect(junctionBox1, junctionBox2 int) bool {
 		p.junctionBoxes[boxID].circuitID = circuitID1
 	}
 
-	return true
+	return
 }
 
 func (p *playground) joinCircuits(circuitID1, circuitID2 int) {
