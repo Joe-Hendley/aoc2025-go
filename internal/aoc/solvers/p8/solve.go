@@ -1,13 +1,13 @@
 package p8
 
 import (
-	"math"
 	"slices"
 	"strings"
 
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/grid"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/logger"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/must"
+	"github.com/Joe-Hendley/aoc2025/internal/aoc/numeric"
 )
 
 type Solver struct {
@@ -78,13 +78,6 @@ func (s *Solver) Part2(input string) int {
 	return x1 * x2
 }
 
-func euclidianDistance(x1, x2, y1, y2, z1, z2 float64) float64 {
-	xComponent := math.Pow(x1-x2, 2)
-	yComponent := math.Pow(y1-y2, 2)
-	zComponent := math.Pow(z1-z2, 2)
-	return math.Sqrt(xComponent + yComponent + zComponent)
-}
-
 type junctionBox struct {
 	id        int
 	x, y, z   int
@@ -92,10 +85,10 @@ type junctionBox struct {
 }
 
 func (jb junctionBox) distance(jb2 junctionBox) float64 {
-	return euclidianDistance(
-		float64(jb.x), float64(jb2.x),
-		float64(jb.y), float64(jb2.y),
-		float64(jb.z), float64(jb2.z),
+	return numeric.IntDistance3D(
+		jb.x, jb2.x,
+		jb.y, jb2.y,
+		jb.z, jb2.z,
 	)
 }
 
@@ -209,8 +202,6 @@ func (p *playground) connect(junctionBox1, junctionBox2 int) {
 	for _, boxID := range p.circuits[circuitID1] {
 		p.junctionBoxes[boxID].circuitID = circuitID1
 	}
-
-	return
 }
 
 func (p *playground) joinCircuits(circuitID1, circuitID2 int) {

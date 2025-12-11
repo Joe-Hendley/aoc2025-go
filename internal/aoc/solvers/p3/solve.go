@@ -4,9 +4,9 @@ import (
 	"strings"
 
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/fun"
-	"github.com/Joe-Hendley/aoc2025/internal/aoc/integer"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/logger"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/must"
+	"github.com/Joe-Hendley/aoc2025/internal/aoc/numeric"
 )
 
 type Solver struct {
@@ -20,7 +20,7 @@ func (s *Solver) Init(verbose bool) {
 func (s *Solver) Part1(input string) int {
 	lines := strings.Split(input, "\n")
 
-	return integer.Sum(fun.Map(lines, solveLinePartOne)...)
+	return numeric.SumInts(fun.Map(lines, solveLinePartOne)...)
 }
 
 func solveLinePartOne(input string) int {
@@ -30,7 +30,7 @@ func solveLinePartOne(input string) int {
 func (s *Solver) Part2(input string) int {
 	lines := strings.Split(input, "\n")
 
-	return integer.Sum(fun.Map(lines, solveLinePartTwo)...)
+	return numeric.SumInts(fun.Map(lines, solveLinePartTwo)...)
 }
 
 func solveLinePartTwo(line string) int {

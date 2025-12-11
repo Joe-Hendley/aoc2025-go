@@ -126,5 +126,6 @@ func (s *Solver) Part2(input string) int {
 		freshIngredientIDs += (freshRange.end - freshRange.start) + 1
 	}
 
-	return freshIngredientIDs
+	return 0 // until I come back to this properly
+	//return freshIngredientIDs
 }

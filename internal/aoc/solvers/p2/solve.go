@@ -6,9 +6,9 @@ import (
 	"sync"
 
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/fun"
-	"github.com/Joe-Hendley/aoc2025/internal/aoc/integer"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/logger"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/must"
+	"github.com/Joe-Hendley/aoc2025/internal/aoc/numeric"
 )
 
 type Solver struct {
@@ -25,7 +25,7 @@ func (s *Solver) Part1(input string) int {
 
 func partOneSingleThreaded(input string) int {
 	idRanges := parseInput(input)
-	sumInvalidIDs := integer.Sum(fun.FlatMap(idRanges, func(ir idRange) []int {
+	sumInvalidIDs := numeric.SumInts(fun.FlatMap(idRanges, func(ir idRange) []int {
 		return ir.findInvalidIDsPartOne()
 	})...)
 	return sumInvalidIDs
@@ -41,7 +41,7 @@ func partOneMultiThreaded(input string) int {
 	for _, idr := range ranges {
 		wg.Go(func() {
 			parsedRange := parseRange(idr)
-			res := integer.Sum(parsedRange.findInvalidIDsPartOne()...)
+			res := numeric.SumInts(parsedRange.findInvalidIDsPartOne()...)
 			resultChan <- res
 		})
 	}
@@ -69,7 +69,7 @@ func (s *Solver) Part2(input string) int {
 
 func partTwoSingleThreaded(input string) int {
 	idRanges := parseInput(input)
-	sumInvalidIDs := integer.Sum(fun.FlatMap(idRanges, func(ir idRange) []int {
+	sumInvalidIDs := numeric.SumInts(fun.FlatMap(idRanges, func(ir idRange) []int {
 		return ir.findInvalidIDsPartTwo()
 	})...)
 	return sumInvalidIDs
@@ -85,7 +85,7 @@ func partTwoMultiThreaded(input string) int {
 	for _, idr := range ranges {
 		wg.Go(func() {
 			parsedRange := parseRange(idr)
-			res := integer.Sum(parsedRange.findInvalidIDsPartTwo()...)
+			res := numeric.SumInts(parsedRange.findInvalidIDsPartTwo()...)
 			resultChan <- res
 		})
 	}
