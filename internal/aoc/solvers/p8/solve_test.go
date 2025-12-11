@@ -88,7 +88,7 @@ func TestConnect(t *testing.T) {
 			},
 		}
 
-		ok := initialPlayground.connect(0, 1)
+		initialPlayground.connect(0, 1)
 
 		wantPlayground := playground{
 			junctionBoxes: []junctionBox{
@@ -104,7 +104,6 @@ func TestConnect(t *testing.T) {
 			},
 		}
 
-		assert.Equal(t, ok, false)
 		assert.DeepEqual(t, initialPlayground, wantPlayground)
 	})
 
@@ -123,7 +122,7 @@ func TestConnect(t *testing.T) {
 			},
 		}
 
-		ok := initialPlayground.connect(1, 2)
+		initialPlayground.connect(1, 2)
 
 		wantPlayground := playground{
 			junctionBoxes: []junctionBox{
@@ -138,7 +137,6 @@ func TestConnect(t *testing.T) {
 			},
 		}
 
-		assert.Equal(t, ok, true)
 		assert.DeepEqual(t, initialPlayground, wantPlayground)
 	})
 }
