@@ -7,6 +7,8 @@ import (
 
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/file"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p1"
+	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p10"
+	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p11"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p2"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p3"
 	"github.com/Joe-Hendley/aoc2025/internal/aoc/solvers/p4"
@@ -41,6 +43,8 @@ var solvers = []solver{
 	&p7.Solver{},
 	&p8.Solver{},
 	&p9.Solver{},
+	&p10.Solver{},
+	&p11.Solver{},
 }
 
 func Solve() int {
